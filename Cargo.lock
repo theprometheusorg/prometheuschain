@@ -2147,54 +2147,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "cc-cli"
-version = "2.1.0"
-dependencies = [
- "alloy-node-bindings",
- "alloy-primitives",
- "alloy-provider",
- "alloy-rpc-types",
- "alloy-rpc-types-eth",
- "aquamarine",
- "backon",
- "clap",
- "reth-chainspec",
- "reth-cli-runner",
- "reth-cli-util",
- "reth-consensus",
- "reth-consensus-common",
- "reth-db",
- "reth-ethereum-cli",
- "reth-ethereum-payload-builder",
- "reth-ethereum-primitives",
- "reth-network",
- "reth-network-api",
- "reth-node-api",
- "reth-node-builder",
- "reth-node-core",
- "reth-node-ethereum",
- "reth-node-metrics",
- "reth-payload-builder",
- "reth-payload-primitives",
- "reth-primitives-traits",
- "reth-provider",
- "reth-revm",
- "reth-rpc",
- "reth-rpc-api",
- "reth-rpc-builder",
- "reth-rpc-convert",
- "reth-rpc-eth-types",
- "reth-rpc-server-types",
- "reth-tasks",
- "reth-transaction-pool",
- "serde_json",
- "tempfile",
- "tokio",
- "toml",
- "tracing",
-]
-
-[[package]]
 name = "cesu8"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6862,6 +6814,54 @@ dependencies = [
  "bitflags 2.11.1",
  "chrono",
  "hex",
+]
+
+[[package]]
+name = "prometheus-cli"
+version = "2.1.0"
+dependencies = [
+ "alloy-node-bindings",
+ "alloy-primitives",
+ "alloy-provider",
+ "alloy-rpc-types",
+ "alloy-rpc-types-eth",
+ "aquamarine",
+ "backon",
+ "clap",
+ "reth-chainspec",
+ "reth-cli-runner",
+ "reth-cli-util",
+ "reth-consensus",
+ "reth-consensus-common",
+ "reth-db",
+ "reth-ethereum-cli",
+ "reth-ethereum-payload-builder",
+ "reth-ethereum-primitives",
+ "reth-network",
+ "reth-network-api",
+ "reth-node-api",
+ "reth-node-builder",
+ "reth-node-core",
+ "reth-node-ethereum",
+ "reth-node-metrics",
+ "reth-payload-builder",
+ "reth-payload-primitives",
+ "reth-primitives-traits",
+ "reth-provider",
+ "reth-revm",
+ "reth-rpc",
+ "reth-rpc-api",
+ "reth-rpc-builder",
+ "reth-rpc-convert",
+ "reth-rpc-eth-types",
+ "reth-rpc-server-types",
+ "reth-tasks",
+ "reth-transaction-pool",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "toml",
+ "tracing",
 ]
 
 [[package]]

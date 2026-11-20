@@ -1,31 +1,31 @@
 [package]
-name = "cc-cli"
+name = "prometheus-cli"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 homepage.workspace = true
 repository.workspace = true
-description = "CreditChain node implementation"
-default-run = "creditchaind"
+description = "PrometheusChain node implementation for the Prometheus AGE economy"
+default-run = "prometheuschaind"
 
 [package.metadata.deb]
-name = "creditchaind"
-maintainer = "CreditChain Research Team"
+name = "prometheuschaind"
+maintainer = "PrometheusChain Research Team"
 depends = "$auto"
 section = "network"
 priority = "optional"
 maintainer-scripts = "../../packaging/debian/"
 assets = [
     "$auto",
-    ["../../README.md", "usr/share/doc/creditchaind/", "644"],
-    ["../../LICENSE-APACHE", "usr/share/doc/creditchaind/", "644"],
-    ["../../LICENSE-MIT", "usr/share/doc/creditchaind/", "644"],
+    ["../../README.md", "usr/share/doc/prometheuschaind/", "644"],
+    ["../../LICENSE-APACHE", "usr/share/doc/prometheuschaind/", "644"],
+    ["../../LICENSE-MIT", "usr/share/doc/prometheuschaind/", "644"],
 ]
-systemd-units = { enable = false, start = false, unit-name = "creditchaind", unit-scripts = "../../packaging/debian" }
+systemd-units = { enable = false, start = false, unit-name = "prometheuschaind", unit-scripts = "../../packaging/debian" }
 
 [lib]
-name = "cc_cli"
+name = "prometheus_cli"
 path = "src/lib.rs"
 
 [lints]
@@ -192,5 +192,5 @@ min-trace-logs = [
 trie-debug = ["reth-node-builder/trie-debug", "reth-node-core/trie-debug"]
 
 [[bin]]
-name = "creditchaind"
+name = "prometheuschaind"
 path = "src/main.rs"

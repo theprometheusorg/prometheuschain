@@ -2,7 +2,7 @@ use reth_chainspec::{ChainSpec, DEV, HOLESKY, HOODI, MAINNET, SEPOLIA};
 use reth_cli::chainspec::{parse_genesis, ChainSpecParser};
 use std::sync::Arc;
 
-/// Chains supported by CreditChain.
+/// Chains supported by PrometheusChain.
 ///
 /// The upstream Ethereum aliases remain available so compatibility testing and shallow-fork
 /// maintenance can continue without bespoke tooling.
@@ -16,7 +16,7 @@ pub const SUPPORTED_CHAINS: &[&str] = &[
     "local-multinode",
     "devnet",
     "testnet",
-    "creditchain-mainnet",
+    "prometheus-mainnet",
 ];
 
 /// Clap value parser for [`ChainSpec`]s.
@@ -30,28 +30,28 @@ pub fn chain_value_parser(s: &str) -> eyre::Result<Arc<ChainSpec>, eyre::Error> 
         "holesky" => HOLESKY.clone(),
         "hoodi" => HOODI.clone(),
         "dev" => DEV.clone(),
-        "local-single" => creditchain_genesis("local-single")?,
-        "local-multinode" => creditchain_genesis("local-multinode")?,
-        "devnet" => creditchain_genesis("devnet")?,
-        "testnet" => creditchain_genesis("testnet")?,
-        "creditchain-mainnet" => creditchain_genesis("mainnet")?,
+        "local-single" => prometheus_genesis("local-single")?,
+        "local-multinode" => prometheus_genesis("local-multinode")?,
+        "devnet" => prometheus_genesis("devnet")?,
+        "testnet" => prometheus_genesis("testnet")?,
+        "prometheus-mainnet" => prometheus_genesis("mainnet")?,
         _ => Arc::new(parse_genesis(s)?.into()),
     })
 }
 
-fn creditchain_genesis(environment: &str) -> eyre::Result<Arc<ChainSpec>> {
+fn prometheus_genesis(environment: &str) -> eyre::Result<Arc<ChainSpec>> {
     let raw = match environment {
         "local-single" => include_str!("../../../../genesis/local-single.json"),
         "local-multinode" => include_str!("../../../../genesis/local-multinode.json"),
         "devnet" => include_str!("../../../../genesis/devnet.json"),
         "testnet" => include_str!("../../../../genesis/testnet.json"),
         "mainnet" => include_str!("../../../../genesis/mainnet.json"),
-        _ => unreachable!("unknown built-in CreditChain environment"),
+        _ => unreachable!("unknown built-in PrometheusChain environment"),
     };
     Ok(Arc::new(parse_genesis(raw)?.into()))
 }
 
-/// CreditChain chain specification parser.
+/// PrometheusChain chain specification parser.
 #[derive(Debug, Clone, Default)]
 #[non_exhaustive]
 pub struct EthereumChainSpecParser;

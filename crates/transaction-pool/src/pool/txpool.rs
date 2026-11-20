@@ -3464,7 +3464,8 @@ mod tests {
 
         // Now decrease basefee to trigger the zero-allocation optimization
         let mut block_info = pool.block_info();
-        block_info.pending_basefee = 450; // tx1 (500) and tx2 (600) can now afford it, tx3 (400) cannot
+        block_info.pending_basefee = 450; // tx1 (500) and tx2 (600) can now afford it, tx3 (400)
+                                          // cannot
         pool.set_block_info(block_info);
 
         // Verify the optimization worked correctly:
@@ -4426,7 +4427,7 @@ mod tests {
         );
     }
 
-    // <https://github.com/openibank/creditchain/issues/12286>
+    // <https://github.com/paradigmxyz/reth/issues/12286>
     #[test]
     fn one_sender_one_independent_transaction() {
         let mut on_chain_balance = U256::from(4_999); // only enough for 4 txs
@@ -4635,7 +4636,7 @@ mod tests {
         );
     }
 
-    /// Test for <https://github.com/openibank/creditchain/issues/17701>
+    /// Test for <https://github.com/paradigmxyz/reth/issues/17701>
     ///
     /// When a new transaction is added and its `updates` contain a same-sender transaction with
     /// a lower nonce, the lower-nonce tx must be added to the pending subpool *before* the

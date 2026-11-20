@@ -454,7 +454,7 @@ impl<ChainSpec> NodeConfig<ChainSpec> {
 
         // try to look up the header in the database
         if let Some(header) = header {
-            info!(target: "creditchaind::cli", ?tip, "Successfully looked up tip block in the database");
+            info!(target: "prometheuschaind::cli", ?tip, "Successfully looked up tip block in the database");
             return Ok(header.number())
         }
 
@@ -472,18 +472,18 @@ impl<ChainSpec> NodeConfig<ChainSpec> {
     where
         Client: HeadersClient<Header: reth_primitives_traits::BlockHeader>,
     {
-        info!(target: "creditchaind::cli", ?tip, "Fetching tip block from the network.");
+        info!(target: "prometheuschaind::cli", ?tip, "Fetching tip block from the network.");
         let mut fetch_failures = 0;
         loop {
             match get_single_header(&client, tip).await {
                 Ok(tip_header) => {
-                    info!(target: "creditchaind::cli", ?tip, "Successfully fetched tip");
+                    info!(target: "prometheuschaind::cli", ?tip, "Successfully fetched tip");
                     return tip_header
                 }
                 Err(error) => {
                     fetch_failures += 1;
                     if fetch_failures % 20 == 0 {
-                        error!(target: "creditchaind::cli", ?fetch_failures, %error, "Failed to fetch the tip. Retrying...");
+                        error!(target: "prometheuschaind::cli", ?fetch_failures, %error, "Failed to fetch the tip. Retrying...");
                     }
                 }
             }

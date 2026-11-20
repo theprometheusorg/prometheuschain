@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-  <title id="title">CreditChain logo</title>
-  <desc id="desc">Overlapping translucent chain petals forming a CreditChain mark.</desc>
+  <title id="title">PrometheusChain logo</title>
+  <desc id="desc">Overlapping translucent chain petals forming a PrometheusChain mark.</desc>
   <defs>
     <style>
       .edge { fill: none; stroke: #102d5c; stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }

@@ -27,7 +27,7 @@ pub struct BenchmarkArgs {
     ///
     /// If no path is provided, a secret will be generated and stored in the datadir under
     /// `<DIR>/<CHAIN_ID>/jwt.hex`. For mainnet this would be
-    /// `~/.local/share/creditchain/mainnet/jwt.hex` by default.
+    /// `~/.local/share/prometheus/mainnet/jwt.hex` by default.
     #[arg(
         long = "jwt-secret",
         alias = "jwtsecret",

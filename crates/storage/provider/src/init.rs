@@ -137,7 +137,7 @@ where
                 }
             }
         }
-        trace!(target: "creditchaind::cli", "Inserted storage history");
+        trace!(target: "prometheuschaind::cli", "Inserted storage history");
         Ok(((), writer.into_raw_rocksdb_batch()))
     })?;
 

@@ -1,10 +1,15 @@
 [environment]
 name = "local-multinode"
-display_name = "CreditChain Local Multinode"
+display_name = "PrometheusChain Local Multinode"
 chain_id = 2026042402
 reset_policy = "ephemeral"
 genesis = "genesis/local-multinode.json"
-binary = "creditchaind"
+binary = "prometheuschaind"
+
+[currency]
+name = "Prometheus"
+symbol = "PRM"
+decimals = 18
 
 [rpc]
 http_addr = "127.0.0.1"
@@ -19,5 +24,5 @@ bootnodes = []
 validator_count = 2
 
 [links]
-website = "https://www.creditchain.org"
-docs = "https://docs.creditchain.org"
+website = "https://www.prometheuschain.org"
+docs = "https://docs.prometheuschain.org"

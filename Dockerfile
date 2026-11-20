@@ -3,7 +3,7 @@
 FROM lukemathwalker/cargo-chef:latest-rust-1.93 AS chef
 WORKDIR /app
 
-LABEL org.opencontainers.image.source=https://github.com/openibank/creditchain
+LABEL org.opencontainers.image.source=https://github.com/theprometheusorg/prometheuschain
 LABEL org.opencontainers.image.licenses="MIT OR Apache-2.0"
 
 # Install system dependencies
@@ -43,21 +43,21 @@ RUN if [ -n "$RUSTFLAGS" ]; then \
     elif [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
         export RUSTFLAGS="-C target-cpu=x86-64-v3 -C target-feature=+pclmulqdq"; \
     fi && \
-    cargo build --profile $BUILD_PROFILE --features "$FEATURES" --locked --bin creditchaind
+    cargo build --profile $BUILD_PROFILE --features "$FEATURES" --locked --bin prometheuschaind
 
 # ARG is not resolved in COPY so we have to hack around it by copying the
 # binary to a temporary location
-RUN cp /app/target/$BUILD_PROFILE/creditchaind /app/creditchaind
+RUN cp /app/target/$BUILD_PROFILE/prometheuschaind /app/prometheuschaind
 
 # Use Ubuntu as the release image
 FROM ubuntu AS runtime
 WORKDIR /app
 
-# Copy creditchaind over from the build stage
-COPY --from=builder /app/creditchaind /usr/local/bin
+# Copy prometheuschaind over from the build stage
+COPY --from=builder /app/prometheuschaind /usr/local/bin
 
 # Copy licenses
 COPY LICENSE-* ./
 
 EXPOSE 30303 30303/udp 9001 8545 8546
-ENTRYPOINT ["/usr/local/bin/creditchaind"]
+ENTRYPOINT ["/usr/local/bin/prometheuschaind"]

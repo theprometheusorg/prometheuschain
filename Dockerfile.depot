@@ -1,13 +1,13 @@
 # syntax=docker/dockerfile:1
 
-# Dockerfile for CreditChain, optimized for Depot builds
+# Dockerfile for PrometheusChain, optimized for Depot builds
 # Usage:
-#   creditchaind: --build-arg BINARY=creditchaind
+#   prometheuschaind: --build-arg BINARY=prometheuschaind
 
 FROM rust:1.93 AS builder
 WORKDIR /app
 
-LABEL org.opencontainers.image.source=https://github.com/openibank/creditchain
+LABEL org.opencontainers.image.source=https://github.com/theprometheusorg/prometheuschain
 LABEL org.opencontainers.image.licenses="MIT OR Apache-2.0"
 
 RUN apt-get update && apt-get install -y libclang-dev pkg-config
@@ -19,7 +19,7 @@ ENV SCCACHE_DIR=/sccache
 ENV SCCACHE_WEBDAV_ENDPOINT=https://cache.depot.dev
 
 # Binary to build
-ARG BINARY=creditchaind
+ARG BINARY=prometheuschaind
 
 # Manifest path for the binary
 ARG MANIFEST_PATH=bin/reth
@@ -70,7 +70,7 @@ FROM ubuntu:24.04 AS runtime
 WORKDIR /app
 
 # Binary name for entrypoint
-ARG BINARY=creditchaind
+ARG BINARY=prometheuschaind
 
 # Install runtime dependencies
 RUN apt-get update && \
@@ -80,11 +80,11 @@ RUN apt-get update && \
 # Copy binary from build stage and create canonical symlink for entrypoint
 COPY --from=builder /app/binary /usr/local/bin/
 RUN mv /usr/local/bin/binary /usr/local/bin/$BINARY && \
-    ln -s /usr/local/bin/$BINARY /usr/local/bin/creditchain-binary && \
+    ln -s /usr/local/bin/$BINARY /usr/local/bin/prometheus-binary && \
     chmod +x /usr/local/bin/$BINARY
 
 # Copy licenses
 COPY LICENSE-* ./
 
 EXPOSE 30303 30303/udp 9001 8545 8546
-ENTRYPOINT ["/usr/local/bin/creditchain-binary"]
+ENTRYPOINT ["/usr/local/bin/prometheus-binary"]

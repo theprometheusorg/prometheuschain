@@ -2,4 +2,4 @@
 
 ## Report a Vulnerability
 
-Contact [security@creditchain.org](mailto:security@creditchain.org).
+Contact [security@prometheuschain.org](mailto:security@prometheuschain.org).

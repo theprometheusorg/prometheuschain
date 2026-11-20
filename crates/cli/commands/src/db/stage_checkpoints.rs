@@ -1,4 +1,4 @@
-//! `creditchaind db stage-checkpoints` command for viewing and setting stage checkpoint values.
+//! `prometheuschaind db stage-checkpoints` command for viewing and setting stage checkpoint values.
 
 use clap::{Args, Parser, Subcommand, ValueEnum};
 use reth_db_common::DbTool;
@@ -10,7 +10,7 @@ use reth_stages::StageId;
 
 use crate::common::AccessRights;
 
-/// `creditchaind db stage-checkpoints` subcommand
+/// `prometheuschaind db stage-checkpoints` subcommand
 #[derive(Debug, Parser)]
 pub struct Command {
     #[command(subcommand)]

@@ -117,7 +117,7 @@ impl PrometheusRecorder {
 
         // Build metrics stack
         Stack::new(recorder)
-            .push(PrefixLayer::new("creditchain"))
+            .push(PrefixLayer::new("prometheus"))
             .install()
             .wrap_err("Couldn't set metrics recorder.")?;
 

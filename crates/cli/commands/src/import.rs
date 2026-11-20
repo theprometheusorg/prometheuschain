@@ -53,14 +53,14 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> ImportComm
         N: CliNodeTypes<ChainSpec = C::ChainSpec>,
         Comp: CliNodeComponents<N>,
     {
-        info!(target: "creditchaind::cli", "creditchaind {} starting", version_metadata().short_version);
+        info!(target: "prometheuschaind::cli", "prometheuschaind {} starting", version_metadata().short_version);
 
         let Environment { provider_factory, config, .. } =
             self.env.init::<N>(AccessRights::RW, runtime.clone())?;
 
         let components = components(provider_factory.chain_spec());
 
-        info!(target: "creditchaind::cli", "Starting import of {} file(s)", self.paths.len());
+        info!(target: "prometheuschaind::cli", "Starting import of {} file(s)", self.paths.len());
 
         let import_config = ImportConfig {
             no_state: self.no_state,
@@ -78,7 +78,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> ImportComm
 
         // Import each file sequentially
         for (index, path) in self.paths.iter().enumerate() {
-            info!(target: "creditchaind::cli", "Importing file {} of {}: {}", index + 1, self.paths.len(), path.display());
+            info!(target: "prometheuschaind::cli", "Importing file {} of {}: {}", index + 1, self.paths.len(), path.display());
 
             let result = import_blocks_from_file(
                 path,
@@ -98,7 +98,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> ImportComm
 
             // Check if we stopped due to an invalid block
             if result.stopped_on_invalid_block {
-                info!(target: "creditchaind::cli",
+                info!(target: "prometheuschaind::cli",
                       "Stopped at last valid block {} due to invalid block {} in file: {}. Imported {} blocks, {} transactions",
                       result.last_valid_block.unwrap_or(0),
                       result.bad_block.unwrap_or(0),
@@ -120,12 +120,12 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> ImportComm
                 ));
             }
 
-            info!(target: "creditchaind::cli",
+            info!(target: "prometheuschaind::cli",
                   "Successfully imported file {}: {} blocks, {} transactions",
                   path.display(), result.total_imported_blocks, result.total_imported_txns);
         }
 
-        info!(target: "creditchaind::cli",
+        info!(target: "prometheuschaind::cli",
               "Import complete. Total: {}/{} blocks, {}/{} transactions",
               total_imported_blocks, total_decoded_blocks, total_imported_txns, total_decoded_txns);
 
@@ -143,16 +143,21 @@ impl<C: ChainSpecParser> ImportCommand<C> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use reth_ethereum_cli::chainspec::{EthereumChainSpecParser, SUPPORTED_CHAINS};
+    use reth_ethereum_cli::chainspec::{
+        chain_value_parser, EthereumChainSpecParser, SUPPORTED_CHAINS,
+    };
 
     #[test]
     fn parse_common_import_command_chain_args() {
         for chain in SUPPORTED_CHAINS {
             let args: ImportCommand<EthereumChainSpecParser> =
                 ImportCommand::parse_from(["reth", "--chain", chain, "."]);
+            // Compare resolved chain IDs: PrometheusChain environment aliases come from bundled
+            // genesis files and are not named `Chain` variants.
+            let expected = chain_value_parser(chain).unwrap();
             assert_eq!(
-                Ok(args.env.chain.chain),
-                chain.parse::<reth_chainspec::Chain>(),
+                args.env.chain.chain.id(),
+                expected.chain.id(),
                 "failed to parse chain {chain}"
             );
         }

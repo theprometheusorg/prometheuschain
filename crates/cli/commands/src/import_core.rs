@@ -94,15 +94,15 @@ where
     N: ProviderNodeTypes,
 {
     if import_config.no_state {
-        info!(target: "creditchaind::import", "Disabled stages requiring state");
+        info!(target: "prometheuschaind::import", "Disabled stages requiring state");
     }
 
-    debug!(target: "creditchaind::import",
+    debug!(target: "prometheuschaind::import",
         chunk_byte_len=import_config.chunk_len.unwrap_or(DEFAULT_BYTE_LEN_CHUNK_CHAIN_FILE),
         "Chunking chain import"
     );
 
-    info!(target: "creditchaind::import", "Consensus engine initialized");
+    info!(target: "prometheuschaind::import", "Consensus engine initialized");
 
     // open file
     let mut reader = ChunkedFileReader::new(path, import_config.chunk_len).await?;
@@ -135,12 +135,12 @@ where
         reader.next_chunk::<BlockTy<N>>(consensus.clone(), Some(sealed_header)).await?
     {
         // create a new FileClient from chunk read from file
-        info!(target: "creditchaind::import",
+        info!(target: "prometheuschaind::import",
             "Importing chain file chunk"
         );
 
         let tip = file_client.tip().ok_or(eyre::eyre!("file client has no tip"))?;
-        info!(target: "creditchaind::import", "Chain file chunk read");
+        info!(target: "prometheuschaind::import", "Chain file chunk read");
 
         total_decoded_blocks += file_client.headers_len();
         total_decoded_txns += file_client.total_transactions();
@@ -158,20 +158,20 @@ where
 
         // override the tip
         pipeline.set_tip(tip);
-        debug!(target: "creditchaind::import", ?tip, "Tip manually set");
+        debug!(target: "prometheuschaind::import", ?tip, "Tip manually set");
 
         let latest_block_number =
             provider_factory.get_stage_checkpoint(StageId::Finish)?.map(|ch| ch.block_number);
         tokio::spawn(reth_node_events::node::handle_events(None, latest_block_number, events));
 
         // Run pipeline
-        info!(target: "creditchaind::import", "Starting sync pipeline");
+        info!(target: "prometheuschaind::import", "Starting sync pipeline");
         if import_config.fail_on_invalid_block {
             // Original behavior: fail on unwind
             tokio::select! {
                 res = pipeline.run() => res?,
                 _ = tokio::signal::ctrl_c() => {
-                    info!(target: "creditchaind::import", "Import interrupted by user");
+                    info!(target: "prometheuschaind::import", "Import interrupted by user");
                     break;
                 },
             }
@@ -180,7 +180,7 @@ where
             let result = tokio::select! {
                 res = pipeline.run_loop() => res,
                 _ = tokio::signal::ctrl_c() => {
-                    info!(target: "creditchaind::import", "Import interrupted by user");
+                    info!(target: "prometheuschaind::import", "Import interrupted by user");
                     break;
                 },
             };
@@ -190,7 +190,7 @@ where
                     // An invalid block was encountered; stop at last valid block
                     let bad = bad_block.block.number;
                     warn!(
-                        target: "creditchaind::import",
+                        target: "prometheuschaind::import",
                         bad_block = bad,
                         last_valid_block = target,
                         "Invalid block encountered during import; stopping at last valid block"
@@ -201,10 +201,10 @@ where
                     break;
                 }
                 Ok(ControlFlow::Continue { block_number }) => {
-                    debug!(target: "creditchaind::import", block_number, "Pipeline chunk completed");
+                    debug!(target: "prometheuschaind::import", block_number, "Pipeline chunk completed");
                 }
                 Ok(ControlFlow::NoProgress { block_number }) => {
-                    debug!(target: "creditchaind::import", ?block_number, "Pipeline made no progress");
+                    debug!(target: "prometheuschaind::import", ?block_number, "Pipeline made no progress");
                 }
                 Err(e) => {
                     // Propagate other pipeline errors
@@ -238,7 +238,7 @@ where
     };
 
     if result.stopped_on_invalid_block {
-        info!(target: "creditchaind::import",
+        info!(target: "prometheuschaind::import",
             total_imported_blocks,
             total_imported_txns,
             bad_block = ?result.bad_block,
@@ -246,7 +246,7 @@ where
             "Import stopped at last valid block due to invalid block"
         );
     } else if !result.is_complete() {
-        error!(target: "creditchaind::import",
+        error!(target: "prometheuschaind::import",
             total_decoded_blocks,
             total_imported_blocks,
             total_decoded_txns,
@@ -254,7 +254,7 @@ where
             "Chain was partially imported"
         );
     } else {
-        info!(target: "creditchaind::import",
+        info!(target: "prometheuschaind::import",
             total_imported_blocks,
             total_imported_txns,
             "Chain was fully imported"

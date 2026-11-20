@@ -1,9 +1,9 @@
 //! A tokio based CLI runner.
 
 #![doc(
-    html_logo_url = "https://www.creditchain.org",
-    html_favicon_url = "https://www.creditchain.org/favicon.ico",
-    issue_tracker_base_url = "https://github.com/openibank/creditchain/issues/"
+    html_logo_url = "https://www.prometheuschain.org",
+    html_favicon_url = "https://www.prometheuschain.org/favicon.ico",
+    issue_tracker_base_url = "https://github.com/paradigmxyz/reth/issues/"
 )]
 #![cfg_attr(not(test), warn(unused_crate_dependencies))]
 #![cfg_attr(docsrs, feature(doc_cfg))]
@@ -87,9 +87,9 @@ impl CliRunner {
         ));
 
         if let Err(err) = &command_res {
-            error!(target: "creditchaind::cli", %err, "shutting down due to error");
+            error!(target: "prometheuschaind::cli", %err, "shutting down due to error");
         } else {
-            debug!(target: "creditchaind::cli", "shutting down gracefully");
+            debug!(target: "prometheuschaind::cli", "shutting down gracefully");
             // after the command has finished or exit signal was received we shutdown the
             // runtime which fires the shutdown signal to all tasks spawned via the task
             // executor and awaiting on tasks spawned with graceful shutdown
@@ -133,9 +133,9 @@ impl CliRunner {
         ));
 
         if let Err(err) = &command_res {
-            error!(target: "creditchaind::cli", %err, "shutting down due to error");
+            error!(target: "prometheuschaind::cli", %err, "shutting down due to error");
         } else {
-            debug!(target: "creditchaind::cli", "shutting down gracefully");
+            debug!(target: "prometheuschaind::cli", "shutting down gracefully");
             self.runtime.graceful_shutdown_with_timeout(self.config.graceful_shutdown_timeout);
         }
 
@@ -268,10 +268,10 @@ where
 
         tokio::select! {
             _ = ctrl_c => {
-                info!(target: "creditchaind::cli", "Received ctrl-c");
+                info!(target: "prometheuschaind::cli", "Received ctrl-c");
             },
             _ = sigterm => {
-                info!(target: "creditchaind::cli", "Received SIGTERM");
+                info!(target: "prometheuschaind::cli", "Received SIGTERM");
             },
             res = fut => res?,
         }
@@ -284,7 +284,7 @@ where
 
         tokio::select! {
             _ = ctrl_c => {
-                info!(target: "creditchaind::cli", "Received ctrl-c");
+                info!(target: "prometheuschaind::cli", "Received ctrl-c");
             },
             res = fut => res?,
         }
@@ -312,7 +312,7 @@ fn runtime_shutdown(rt: reth_tasks::Runtime, wait: bool) {
 
     if wait {
         let _ = rx.recv_timeout(DEFAULT_RUNTIME_SHUTDOWN_TIMEOUT).inspect_err(|err| {
-            tracing::warn!(target: "creditchaind::cli", %err, "runtime shutdown timed out");
+            tracing::warn!(target: "prometheuschaind::cli", %err, "runtime shutdown timed out");
         });
     }
 }

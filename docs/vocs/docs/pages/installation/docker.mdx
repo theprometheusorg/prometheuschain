@@ -1,10 +1,10 @@
 ---
-description: Guide to running CreditChain using Docker, including obtaining images from GitHub or building locally, using Docker Compose.
+description: Guide to running PrometheusChain using Docker, including obtaining images from GitHub or building locally, using Docker Compose.
 ---
 
 # Docker
 
-There are two ways to obtain a CreditChain Docker image:
+There are two ways to obtain a PrometheusChain Docker image:
 
 1. [GitHub](#github)
 2. [Building it from source](#building-the-docker-image)
@@ -13,45 +13,45 @@ Once you have obtained the Docker image, proceed to [Using the Docker
 image](#using-the-docker-image).
 
 :::note
-CreditChain requires Docker Engine version 20.10.10 or higher due to [missing support](https://docs.docker.com/engine/release-notes/20.10/#201010) for the `clone3` syscall in previous versions.
+PrometheusChain requires Docker Engine version 20.10.10 or higher due to [missing support](https://docs.docker.com/engine/release-notes/20.10/#201010) for the `clone3` syscall in previous versions.
 :::
 
 ## GitHub
 
-CreditChain Docker images for both x86_64 and ARM64 machines are published with every release on GitHub Container Registry.
+PrometheusChain Docker images for both x86_64 and ARM64 machines are published with every release on GitHub Container Registry.
 
 You can obtain the latest image with:
 
 ```bash
-docker pull ghcr.io/openibank/creditchain
+docker pull ghcr.io/theprometheusorg/prometheuschain
 ```
 
 Or a specific version (e.g. v0.0.1) with:
 
 ```bash
-docker pull ghcr.io/openibank/creditchain:v0.0.1
+docker pull ghcr.io/theprometheusorg/prometheuschain:v0.0.1
 ```
 
 You can test the image with:
 
 ```bash
-docker run --rm ghcr.io/openibank/creditchain --version
+docker run --rm ghcr.io/theprometheusorg/prometheuschain --version
 ```
 
-If you can see the latest [CreditChain release](https://github.com/openibank/creditchain/releases) version, then you've successfully installed CreditChain via Docker.
+If you can see the latest [PrometheusChain release](https://github.com/theprometheusorg/prometheuschain/releases) version, then you've successfully installed PrometheusChain via Docker.
 
 ## Building the Docker image
 
 To build the image from source, navigate to the root of the repository and run:
 
 ```bash
-docker build . -t creditchain:local
+docker build . -t prometheus:local
 ```
 
 The build will likely take several minutes. Once it's built, test it with:
 
 ```bash
-docker run creditchain:local --version
+docker run prometheus:local --version
 ```
 
 ## Using the Docker image
@@ -63,29 +63,29 @@ There are two ways to use the Docker image:
 
 ### Using Plain Docker
 
-To run CreditChain with Docker, run:
+To run PrometheusChain with Docker, run:
 
 ```bash
 docker run \
-    -v creditchaindata:/root/.local/share/creditchain/mainnet \
+    -v prometheuschaindata:/root/.local/share/prometheus/mainnet \
     -d \
     -p 9001:9001 \
     -p 30303:30303 \
     -p 30303:30303/udp \
-    --name creditchaind \
-    creditchain:local \
+    --name prometheuschaind \
+    prometheus:local \
     node \
     --metrics 0.0.0.0:9001
 ```
 
-The above command will create a container named `creditchaind` and a named volume called `creditchaindata` for data persistence.
+The above command will create a container named `prometheuschaind` and a named volume called `prometheuschaindata` for data persistence.
 It will also expose the `30303` port (TCP and UDP) for peering with other nodes and the `9001` port for metrics.
 
-It will use the local image `creditchain:local`. If you want to use the GitHub Container Registry remote image, use `ghcr.io/openibank/creditchain` with your preferred tag.
+It will use the local image `prometheus:local`. If you want to use the GitHub Container Registry remote image, use `ghcr.io/theprometheusorg/prometheuschain` with your preferred tag.
 
 ### Using Docker Compose
 
-To run CreditChain with Docker Compose, run the following command from a shell inside the root directory of this repository:
+To run PrometheusChain with Docker Compose, run the following command from a shell inside the root directory of this repository:
 
 ```bash
 ./etc/generate-jwt.sh
@@ -93,21 +93,21 @@ docker compose -f etc/docker-compose.yml -f etc/lighthouse.yml up -d
 ```
 
 :::note
-If you want to run CreditChain with a CL that is not Lighthouse:
+If you want to run PrometheusChain with a CL that is not Lighthouse:
 
 -   The JWT for the consensus client can be found at `etc/jwttoken/jwt.hex` in this repository, after the `etc/generate-jwt.sh` script is run
--   The CreditChain Engine API is accessible on `localhost:8551`
+-   The PrometheusChain Engine API is accessible on `localhost:8551`
     :::
 
-To check if CreditChain is running correctly, run:
+To check if PrometheusChain is running correctly, run:
 
 ```bash
-docker compose -f etc/docker-compose.yml -f etc/lighthouse.yml logs -f creditchaind
+docker compose -f etc/docker-compose.yml -f etc/lighthouse.yml logs -f prometheuschaind
 ```
 
 The default `docker-compose.yml` file will create three containers:
 
--   CreditChain
+-   PrometheusChain
 -   Prometheus
 -   Grafana
 
@@ -118,24 +118,24 @@ The optional `lighthouse.yml` file will create two containers:
 
 Grafana will be exposed on `localhost:3000` and accessible via default credentials (username and password is `admin`), with two available dashboards:
 
--   CreditChain
+-   PrometheusChain
 -   Ethereum Metrics Exporter (works only if Lighthouse is also running)
 
-## Interacting with CreditChain inside Docker
+## Interacting with PrometheusChain inside Docker
 
-To interact with CreditChain you must first open a shell inside the CreditChain container by running:
+To interact with PrometheusChain you must first open a shell inside the PrometheusChain container by running:
 
 ```bash
-docker exec -it creditchaind bash
+docker exec -it prometheuschaind bash
 ```
 
-**If CreditChain is running with Docker Compose, replace `creditchaind` with `creditchain-creditchaind-1` in the above command**
+**If PrometheusChain is running with Docker Compose, replace `prometheuschaind` with `prometheus-prometheuschaind-1` in the above command**
 
-Refer to the [CLI docs](/cli/creditchaind) to interact with CreditChain once inside the CreditChain container.
+Refer to the [CLI docs](/cli/prometheuschaind) to interact with PrometheusChain once inside the PrometheusChain container.
 
 ## Run only Grafana in Docker
 
-This allows importing existing Grafana dashboards, without running CreditChain in Docker.
+This allows importing existing Grafana dashboards, without running PrometheusChain in Docker.
 
 ```bash
 docker compose -f etc/docker-compose.yml up -d --no-deps grafana

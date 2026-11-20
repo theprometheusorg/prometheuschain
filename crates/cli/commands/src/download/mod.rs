@@ -120,8 +120,9 @@ use std::{
 use tracing::info;
 use tui::{run_selector, SelectorOutput};
 
-const CREDITCHAIN_SNAPSHOTS_BASE_URL: &str = "https://snapshots.creditchain.org";
-const CREDITCHAIN_SNAPSHOTS_API_URL: &str = "https://snapshots.creditchain.org/api/snapshots";
+const PROMETHEUSCHAIN_SNAPSHOTS_BASE_URL: &str = "https://snapshots.prometheuschain.org";
+const PROMETHEUSCHAIN_SNAPSHOTS_API_URL: &str =
+    "https://snapshots.prometheuschain.org/api/snapshots";
 
 /// Maximum number of simultaneous HTTP downloads across the entire snapshot job.
 const MAX_CONCURRENT_DOWNLOADS: usize = 8;
@@ -164,7 +165,7 @@ pub struct DownloadDefaults {
     pub default_chain_aware_base_url: Option<Cow<'static, str>>,
     /// URL for the snapshot discovery API that lists available snapshots.
     ///
-    /// Defaults to `https://snapshots.creditchain.org/api/snapshots`.
+    /// Defaults to `https://snapshots.prometheuschain.org/api/snapshots`.
     pub snapshot_api_url: Cow<'static, str>,
     /// Optional custom long help text that overrides the generated help
     pub long_help: Option<String>,
@@ -181,16 +182,17 @@ impl DownloadDefaults {
         DOWNLOAD_DEFAULTS.get_or_init(DownloadDefaults::default_download_defaults)
     }
 
-    /// Default download configuration with defaults from snapshots.creditchain.org and publicnode
+    /// Default download configuration with defaults from snapshots.prometheuschain.org and
+    /// publicnode
     pub fn default_download_defaults() -> Self {
         Self {
             available_snapshots: vec![
-                Cow::Borrowed("https://snapshots.creditchain.org (default)"),
+                Cow::Borrowed("https://snapshots.prometheuschain.org (default)"),
                 Cow::Borrowed("https://publicnode.com/snapshots (full nodes & testnets)"),
             ],
-            default_base_url: Cow::Borrowed(CREDITCHAIN_SNAPSHOTS_BASE_URL),
+            default_base_url: Cow::Borrowed(PROMETHEUSCHAIN_SNAPSHOTS_BASE_URL),
             default_chain_aware_base_url: None,
-            snapshot_api_url: Cow::Borrowed(CREDITCHAIN_SNAPSHOTS_API_URL),
+            snapshot_api_url: Cow::Borrowed(PROMETHEUSCHAIN_SNAPSHOTS_API_URL),
             long_help: None,
         }
     }
@@ -237,7 +239,7 @@ impl DownloadDefaults {
     }
 
     fn mainnet_only_discovery(&self) -> bool {
-        self.snapshot_api_url == CREDITCHAIN_SNAPSHOTS_API_URL
+        self.snapshot_api_url == PROMETHEUSCHAIN_SNAPSHOTS_API_URL
     }
 
     /// Add a snapshot source to the list
@@ -420,7 +422,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> DownloadCo
         // Legacy single-URL mode: download one archive and extract it
         if let Some(ref url) = self.url {
             let request_limiter = DownloadRequestLimiter::new(self.download_concurrency.max(1));
-            info!(target: "creditchaind::cli",
+            info!(target: "prometheuschaind::cli",
                 dir = ?data_dir.data_dir(),
                 url = %url,
                 "Starting snapshot download and extraction"
@@ -435,7 +437,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> DownloadCo
                 cancel_token.clone(),
             )
             .await?;
-            info!(target: "creditchaind::cli", "Snapshot downloaded and extracted successfully");
+            info!(target: "prometheuschaind::cli", "Snapshot downloaded and extracted successfully");
 
             return Ok(());
         }
@@ -450,13 +452,13 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> DownloadCo
         let target_dir = data_dir.data_dir();
         let planned_downloads = collect_planned_archives(&manifest, &selections)?;
         let startup_summary = summarize_download_startup(&planned_downloads.archives, target_dir)?;
-        info!(target: "creditchaind::cli",
+        info!(target: "prometheuschaind::cli",
             reusable = startup_summary.reusable,
             needs_download = startup_summary.needs_download,
             "Startup integrity summary (plain output files)"
         );
 
-        info!(target: "creditchaind::cli",
+        info!(target: "prometheuschaind::cli",
             archives = planned_downloads.total_archives(),
             download_total = %DownloadProgress::format_size(planned_downloads.total_download_size),
             output_total = %DownloadProgress::format_size(planned_downloads.total_output_size),
@@ -480,11 +482,11 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> DownloadCo
     async fn load_manifest(&self, chain_id: u64) -> Result<SnapshotManifest> {
         let manifest_source = self.resolve_manifest_source(chain_id).await?;
 
-        info!(target: "creditchaind::cli", source = %manifest_source, "Fetching snapshot manifest");
+        info!(target: "prometheuschaind::cli", source = %manifest_source, "Fetching snapshot manifest");
         let mut manifest = fetch_manifest_from_source(&manifest_source).await?;
         manifest.base_url = Some(resolve_manifest_base_url(&manifest, &manifest_source)?);
 
-        info!(target: "creditchaind::cli",
+        info!(target: "prometheuschaind::cli",
             block = manifest.block,
             chain_id = manifest.chain_id,
             storage_version = %manifest.storage_version,
@@ -508,7 +510,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> DownloadCo
             config_for_selections(selections, manifest, preset, Some(self.env.chain.as_ref()));
         if write_config(&config, target_dir)? {
             let desc = config_gen::describe_prune_config(&config);
-            info!(target: "creditchaind::cli", "{}", desc.join(", "));
+            info!(target: "prometheuschaind::cli", "{}", desc.join(", "));
         }
 
         let db = init_db(db_path, self.env.db.database_args())?;
@@ -529,7 +531,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> DownloadCo
         }
 
         let start_command = startup_node_command::<C>(self.env.chain.as_ref());
-        info!(target: "creditchaind::cli", "Snapshot download complete. Run `{}` to start syncing.", start_command);
+        info!(target: "prometheuschaind::cli", "Snapshot download complete. Run `{}` to start syncing.", start_command);
 
         Ok(())
     }
@@ -872,7 +874,7 @@ fn current_binary_name() -> String {
         .and_then(|path| path.file_stem().map(|name| name.to_owned()))
         .and_then(|name| name.into_string().ok())
         .filter(|name| !name.is_empty())
-        .unwrap_or_else(|| "creditchaind".to_string())
+        .unwrap_or_else(|| "prometheuschaind".to_string())
 }
 
 fn startup_chain_arg<C>(chain_spec: &C::ChainSpec) -> Option<String>
@@ -988,7 +990,7 @@ mod tests {
 
         assert!(help.contains("Available snapshot sources:"));
         assert!(help.contains("Ethereum mainnet"));
-        assert!(help.contains("snapshots.creditchain.org"));
+        assert!(help.contains("snapshots.prometheuschain.org"));
         assert!(help.contains("publicnode.com"));
         assert!(help.contains("file://"));
     }

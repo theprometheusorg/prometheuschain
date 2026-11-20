@@ -26,11 +26,11 @@ use reth_tracing::{FileWorkerGuard, Layers};
 use std::{ffi::OsString, fmt, future::Future, marker::PhantomData, sync::Arc};
 use tracing::{info, warn};
 
-/// The main CreditChain CLI interface.
+/// The main PrometheusChain CLI interface.
 ///
 /// This is the entrypoint to the executable.
 #[derive(Debug, Parser)]
-#[command(author, name = "creditchaind", version = version_metadata().short_version.as_ref(), long_version = version_metadata().long_version.as_ref(), about = "CreditChain", long_about = None)]
+#[command(author, name = "prometheuschaind", version = version_metadata().short_version.as_ref(), long_version = version_metadata().long_version.as_ref(), about = "PrometheusChain", long_about = None)]
 pub struct Cli<
     C: ChainSpecParser = EthereumChainSpecParser,
     Ext: clap::Args + fmt::Debug = NoArgs,
@@ -226,24 +226,24 @@ impl<
         // Enable reload support if debug RPC namespace is available
         let enable_reload = self.command.debug_namespace_enabled();
         let file_guard = self.logs.init_tracing_with_layers(layers, enable_reload)?;
-        info!(target: "creditchaind::cli", "Initialized tracing, debug log directory: {}", self.logs.log_file_directory);
+        info!(target: "prometheuschaind::cli", "Initialized tracing, debug log directory: {}", self.logs.log_file_directory);
 
         match otlp_status {
             OtlpInitStatus::Started(endpoint) => {
-                info!(target: "creditchaind::cli", "Started OTLP {:?} tracing export to {endpoint}", self.traces.protocol);
+                info!(target: "prometheuschaind::cli", "Started OTLP {:?} tracing export to {endpoint}", self.traces.protocol);
             }
             OtlpInitStatus::NoFeature => {
-                warn!(target: "creditchaind::cli", "Provided OTLP tracing arguments do not have effect, compile with the `otlp` feature")
+                warn!(target: "prometheuschaind::cli", "Provided OTLP tracing arguments do not have effect, compile with the `otlp` feature")
             }
             OtlpInitStatus::Disabled => {}
         }
 
         match otlp_logs_status {
             OtlpLogsStatus::Started(endpoint) => {
-                info!(target: "creditchaind::cli", "Started OTLP {:?} logs export to {endpoint}", self.traces.protocol);
+                info!(target: "prometheuschaind::cli", "Started OTLP {:?} logs export to {endpoint}", self.traces.protocol);
             }
             OtlpLogsStatus::NoFeature => {
-                warn!(target: "creditchaind::cli", "Provided OTLP logs arguments do not have effect, compile with the `otlp-logs` feature")
+                warn!(target: "prometheuschaind::cli", "Provided OTLP logs arguments do not have effect, compile with the `otlp-logs` feature")
             }
             OtlpLogsStatus::Disabled => {}
         }
@@ -406,7 +406,7 @@ mod tests {
                 reth.logs.log_file_directory.join(chain_spec.chain.to_string());
         }
         let log_dir = reth.logs.log_file_directory;
-        let end = format!("reth/logs/{}", SUPPORTED_CHAINS[0]);
+        let end = format!("prometheuschain/logs/{}", SUPPORTED_CHAINS[0]);
         assert!(log_dir.as_ref().ends_with(end), "{log_dir:?}");
 
         let mut iter = SUPPORTED_CHAINS.iter();
@@ -417,7 +417,7 @@ mod tests {
                 reth.command.chain_spec().map(|c| c.chain.to_string()).unwrap_or(String::new());
             reth.logs.log_file_directory = reth.logs.log_file_directory.join(chain.clone());
             let log_dir = reth.logs.log_file_directory;
-            let end = format!("reth/logs/{chain}");
+            let end = format!("prometheuschain/logs/{chain}");
             assert!(log_dir.as_ref().ends_with(end), "{log_dir:?}");
         }
     }
@@ -432,7 +432,7 @@ mod tests {
                 reth.logs.log_file_directory.join(chain_spec.chain.to_string());
         }
         let log_dir = reth.logs.log_file_directory;
-        let end = format!("reth/logs/{}", SUPPORTED_CHAINS[0]);
+        let end = format!("prometheuschain/logs/{}", SUPPORTED_CHAINS[0]);
         println!("{log_dir:?}");
         assert!(log_dir.as_ref().ends_with(end), "{log_dir:?}");
     }
@@ -446,7 +446,7 @@ mod tests {
                 reth.logs.log_file_directory.join(chain_spec.chain.to_string());
         }
         let log_dir = reth.logs.log_file_directory;
-        let end = "reth/logs".to_string();
+        let end = "prometheuschain/logs".to_string();
         println!("{log_dir:?}");
         assert!(log_dir.as_ref().ends_with(end), "{log_dir:?}");
     }

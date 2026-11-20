@@ -1,0 +1,13 @@
+[Unit]
+Description=PrometheusChain EVM-compatible execution client
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=exec
+DynamicUser=yes
+StateDirectory=prometheus
+ExecStart=/usr/bin/prometheuschaind node --datadir %S/prometheus --log.file.max-files 0
+
+[Install]
+WantedBy=multi-user.target

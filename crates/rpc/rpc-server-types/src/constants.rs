@@ -47,10 +47,10 @@ pub fn default_max_tracing_requests() -> usize {
 pub const DEFAULT_PROOF_PERMITS: usize = 25;
 
 /// The default IPC endpoint
-pub const DEFAULT_IPC_ENDPOINT: &str = "/tmp/creditchaind.ipc";
+pub const DEFAULT_IPC_ENDPOINT: &str = "/tmp/prometheuschaind.ipc";
 
 /// The `engine_api` IPC endpoint
-pub const DEFAULT_ENGINE_API_IPC_ENDPOINT: &str = "/tmp/creditchaind_engine_api.ipc";
+pub const DEFAULT_ENGINE_API_IPC_ENDPOINT: &str = "/tmp/prometheuschaind_engine_api.ipc";
 
 /// The default limit for blocks count in `eth_simulateV1`.
 pub const DEFAULT_MAX_SIMULATE_BLOCKS: u64 = 256;

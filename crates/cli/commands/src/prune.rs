@@ -61,16 +61,16 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> PruneComma
         }
 
         // Copy data from database to static files
-        info!(target: "creditchaind::cli", "Copying data from database to static files...");
+        info!(target: "prometheuschaind::cli", "Copying data from database to static files...");
         let static_file_producer =
             StaticFileProducer::new(provider_factory.clone(), config.segments.clone());
         let lowest_static_file_height =
             static_file_producer.lock().copy_to_static_files()?.min_block_num();
-        info!(target: "creditchaind::cli", ?lowest_static_file_height, "Copied data from database to static files");
+        info!(target: "prometheuschaind::cli", ?lowest_static_file_height, "Copied data from database to static files");
 
         // Delete data which has been copied to static files.
         if let Some(prune_tip) = lowest_static_file_height {
-            info!(target: "creditchaind::cli", ?prune_tip, ?config, "Pruning data from database...");
+            info!(target: "prometheuschaind::cli", ?prune_tip, ?config, "Pruning data from database...");
 
             // Set up cancellation token for graceful shutdown on Ctrl+C
             let cancellation = CancellationToken::new();
@@ -91,7 +91,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> PruneComma
             let mut total_pruned = 0usize;
             loop {
                 if cancellation.is_cancelled() {
-                    info!(target: "creditchaind::cli", total_pruned, "Pruning interrupted by user");
+                    info!(target: "prometheuschaind::cli", total_pruned, "Pruning interrupted by user");
                     break;
                 }
 
@@ -100,7 +100,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> PruneComma
                 total_pruned = total_pruned.saturating_add(batch_pruned);
 
                 if output.progress.is_finished() {
-                    info!(target: "creditchaind::cli", total_pruned, "Pruned data from database");
+                    info!(target: "prometheuschaind::cli", total_pruned, "Pruned data from database");
                     break;
                 }
 
@@ -112,7 +112,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> PruneComma
                 }
 
                 info!(
-                    target: "creditchaind::cli",
+                    target: "prometheuschaind::cli",
                     batch_pruned,
                     total_pruned,
                     "Pruning batch complete, continuing..."
@@ -122,9 +122,9 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> PruneComma
 
         // Flush and compact RocksDB to reclaim disk space after pruning
         {
-            info!(target: "creditchaind::cli", "Flushing and compacting RocksDB...");
+            info!(target: "prometheuschaind::cli", "Flushing and compacting RocksDB...");
             provider_factory.rocksdb_provider().flush_and_compact()?;
-            info!(target: "creditchaind::cli", "RocksDB compaction complete");
+            info!(target: "prometheuschaind::cli", "RocksDB compaction complete");
         }
 
         Ok(())

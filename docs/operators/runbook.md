@@ -1,19 +1,19 @@
-# CreditChain Operator Runbook
+# PrometheusChain Operator Runbook
 
-Copyright (c) CreditChain Research Team.
+Copyright (c) PrometheusChain Research Team.
 
 ## Build
 
 ```sh
-cargo build --bin creditchaind --profile maxperf
+cargo build --bin prometheuschaind --profile maxperf
 ```
 
 ## Local Single Node
 
 ```sh
-target/maxperf/creditchaind node \
+target/maxperf/prometheuschaind node \
   --chain genesis/local-single.json \
-  --datadir .creditchain/local-single \
+  --datadir .prometheus/local-single \
   --http --http.addr 127.0.0.1 --http.port 8545 \
   --http.api eth,net,web3,debug,trace \
   --metrics 127.0.0.1:9001
@@ -22,9 +22,9 @@ target/maxperf/creditchaind node \
 ## Smoke Test
 
 ```sh
-CREDITCHAIND_BIN=target/maxperf/creditchaind \
-CREDITCHAIN_RPC_URL=http://127.0.0.1:8545 \
-scripts/creditchain-smoke.sh
+PROMETHEUSCHAIND_BIN=target/maxperf/prometheuschaind \
+PROMETHEUSCHAIN_RPC_URL=http://127.0.0.1:8545 \
+scripts/prometheus-smoke.sh
 ```
 
 ## Public Environments
@@ -32,4 +32,4 @@ scripts/creditchain-smoke.sh
 Use the environment manifests under `config/environments/` as release inputs.
 Devnet may reset by release. Testnet should not reset casually. Mainnet
 changes require release approval, signed artifacts, and a published operator
-notice on `https://docs.creditchain.org`.
+notice on `https://docs.prometheuschain.org`.

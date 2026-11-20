@@ -1,8 +1,8 @@
-# CreditChain Genesis Files
+# PrometheusChain Genesis Files
 
-Copyright (c) CreditChain Research Team.
+Copyright (c) PrometheusChain Research Team.
 
-These genesis files define the first CreditChain environment set:
+These genesis files define the first PrometheusChain environment set:
 
 - `local-single`: one-node developer network.
 - `local-multinode`: local bootnode, validator, and RPC integration network.

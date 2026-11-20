@@ -132,7 +132,7 @@ impl ArchiveProcessor {
     fn run(self) -> Result<()> {
         let archive = self.archive();
         if self.try_reuse_outputs()? {
-            info!(target: "creditchaind::cli", file = %archive.file_name, component = %self.archive.component, "Skipping already verified plain files");
+            info!(target: "prometheuschaind::cli", file = %archive.file_name, component = %self.archive.component, "Skipping already verified plain files");
             return Ok(());
         }
 
@@ -148,7 +148,7 @@ impl ArchiveProcessor {
                     self.cleanup_outputs();
 
                     if attempt > 1 {
-                        info!(target: "creditchaind::cli",
+                        info!(target: "prometheuschaind::cli",
                             file = %archive.file_name,
                             component = %self.archive.component,
                             attempt,
@@ -160,7 +160,7 @@ impl ArchiveProcessor {
                     match self.run_attempt(mode, format) {
                         Ok(()) => state = ArchiveAttemptState::VerifyOutputs,
                         Err(error) if mode.retries_fetch_errors() => {
-                            warn!(target: "creditchaind::cli",
+                            warn!(target: "prometheuschaind::cli",
                                 file = %archive.file_name,
                                 component = %self.archive.component,
                                 attempt,
@@ -177,7 +177,7 @@ impl ArchiveProcessor {
                     if self.verify_outputs_with_progress()? {
                         state = ArchiveAttemptState::Complete;
                     } else {
-                        warn!(target: "creditchaind::cli", file = %archive.file_name, component = %self.archive.component, attempt, "Archive extracted, but output verification failed, retrying");
+                        warn!(target: "prometheuschaind::cli", file = %archive.file_name, component = %self.archive.component, attempt, "Archive extracted, but output verification failed, retrying");
                         state = ArchiveAttemptState::RetryAttempt;
                     }
                 }
@@ -259,7 +259,7 @@ impl ArchiveProcessor {
             ArchiveFetcher::new(self.archive().url.clone(), cache_dir, self.ctx.session().clone());
 
         if self.archive.ty == super::manifest::SnapshotComponentType::State {
-            debug!(target: "creditchaind::cli", url = %self.archive().url, "Downloading state snapshot archive");
+            debug!(target: "prometheuschaind::cli", url = %self.archive().url, "Downloading state snapshot archive");
         }
 
         let download_result = {
@@ -281,7 +281,7 @@ impl ArchiveProcessor {
             }
         };
 
-        info!(target: "creditchaind::cli",
+        info!(target: "prometheuschaind::cli",
             file = %self.archive().file_name,
             component = %self.archive.component,
             size = %super::progress::DownloadProgress::format_size(downloaded.size),

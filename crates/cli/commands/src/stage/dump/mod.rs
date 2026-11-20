@@ -154,7 +154,7 @@ pub(crate) fn setup<N: NodeTypesWithDB>(
 ) -> eyre::Result<(DatabaseEnv, u64)> {
     assert!(from < to, "FROM block should be lower than TO block.");
 
-    info!(target: "creditchaind::cli", ?output_db, "Creating separate db");
+    info!(target: "prometheuschaind::cli", ?output_db, "Creating separate db");
 
     let output_datadir = init_db(output_db, DatabaseArguments::new(ClientVersion::default()))?;
 

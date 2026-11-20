@@ -68,7 +68,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + EthereumHardforks>> ImportEraC
     where
         N: CliNodeTypes<ChainSpec = C::ChainSpec>,
     {
-        info!(target: "creditchaind::cli", "creditchaind {} starting", version_metadata().short_version);
+        info!(target: "prometheuschaind::cli", "prometheuschaind {} starting", version_metadata().short_version);
 
         let Environment { provider_factory, config, .. } =
             self.env.init::<N>(AccessRights::RW, runtime)?;

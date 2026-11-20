@@ -54,13 +54,13 @@ pub fn generate_vectors(mut tables: Vec<String>) -> Result<()> {
                 match table.as_str() {
                     $(
                         stringify!($table_type) => {
-                            tracing::info!(target: "creditchaind::cli", "Generating test vectors for {} <{}>.", stringify!($table_or_dup), tables::$table_type$(::<$($generic),+>)?::NAME);
+                            tracing::info!(target: "prometheuschaind::cli", "Generating test vectors for {} <{}>.", stringify!($table_or_dup), tables::$table_type$(::<$($generic),+>)?::NAME);
 
                             generate_vector!($table_type$(<$($generic),+>)?, $per_table, $table_or_dup);
                         },
                     )*
                     _ => {
-                        error!(target: "creditchaind::cli", "Unknown table: {}", table);
+                        error!(target: "prometheuschaind::cli", "Unknown table: {}", table);
                     }
                 }
             }

@@ -1,5 +1,5 @@
 import { SidebarItem } from "vocs";
-import { creditchaindCliSidebar } from "./sidebar-cli-creditchaind";
+import { prometheuschaindCliSidebar } from "./sidebar-cli-prometheuschaind";
 export const sidebar: SidebarItem[] = [
     {
         text: "Introduction",
@@ -19,7 +19,7 @@ export const sidebar: SidebarItem[] = [
         ]
     },
     {
-        text: "CreditChain for Node Operators",
+        text: "PrometheusChain for Node Operators",
         items: [
             {
                 text: "System Requirements",
@@ -71,7 +71,7 @@ export const sidebar: SidebarItem[] = [
                         // link: "/run/networks",
                         items: [
                             {
-                                text: "CreditChain",
+                                text: "PrometheusChain",
                                 link: "/run/ethereum",
                                 // items: [
                                 //     {
@@ -126,7 +126,7 @@ export const sidebar: SidebarItem[] = [
         ]
     },
     {
-        text: "CreditChain as a library",
+        text: "PrometheusChain as a library",
         items: [
             {
                 text: "Overview",
@@ -199,7 +199,7 @@ export const sidebar: SidebarItem[] = [
         ]
     },
     {
-        text: "Interacting with CreditChain over JSON-RPC",
+        text: "Interacting with PrometheusChain over JSON-RPC",
         
         items: [
             {
@@ -245,7 +245,7 @@ export const sidebar: SidebarItem[] = [
         link: "/cli/cli",
         collapsed: false,
         items: [
-            creditchaindCliSidebar
+            prometheuschaindCliSidebar
         ]
     },
 ]

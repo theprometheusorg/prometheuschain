@@ -19,16 +19,16 @@ const MINIMUM_RECEIPTS_DISTANCE: u64 = 64;
 /// (`MINIMUM_UNWIND_SAFE_DISTANCE`).
 const MINIMUM_HISTORY_DISTANCE: u64 = 10064;
 
-/// Writes a [`Config`] as TOML to `<data_dir>/creditchain.toml`.
+/// Writes a [`Config`] as TOML to `<data_dir>/prometheuschain.toml`.
 ///
 /// If the file already exists, it is not overwritten. Returns `true` if the file was written.
 pub fn write_config(config: &Config, data_dir: &Path) -> eyre::Result<bool> {
-    let config_path = data_dir.join("creditchain.toml");
+    let config_path = data_dir.join("prometheuschain.toml");
 
     if config_path.exists() {
-        info!(target: "creditchaind::cli",
+        info!(target: "prometheuschaind::cli",
             path = ?config_path,
-            "creditchain.toml already exists, skipping config generation"
+            "prometheuschain.toml already exists, skipping config generation"
         );
         return Ok(false);
     }
@@ -36,9 +36,9 @@ pub fn write_config(config: &Config, data_dir: &Path) -> eyre::Result<bool> {
     let toml_str = toml::to_string_pretty(config)?;
     reth_fs_util::write(&config_path, toml_str)?;
 
-    info!(target: "creditchaind::cli",
+    info!(target: "prometheuschaind::cli",
         path = ?config_path,
-        "Generated creditchain.toml based on downloaded components"
+        "Generated prometheuschain.toml based on downloaded components"
     );
 
     Ok(true)
@@ -85,7 +85,7 @@ where
 
         tx.put::<tables::PruneCheckpoints>(*segment, checkpoint)?;
 
-        info!(target: "creditchaind::cli",
+        info!(target: "prometheuschaind::cli",
             segment = %segment,
             block = snapshot_block,
             tx = ?tx_number,
@@ -128,7 +128,7 @@ where
         // Also clear any stage-specific progress data
         tx.delete::<tables::StageCheckpointProgresses>(stage_id.to_string(), None)?;
 
-        info!(target: "creditchaind::cli", stage = stage_id, "Reset stage checkpoint to block 0");
+        info!(target: "prometheuschaind::cli", stage = stage_id, "Reset stage checkpoint to block 0");
     }
 
     // Clear corresponding prune checkpoints so the pruner doesn't inherit

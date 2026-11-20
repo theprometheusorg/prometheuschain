@@ -4,8 +4,8 @@ import { sidebar } from './sidebar'
 import { basePath } from './redirects.config'
 
 export default defineConfig({
-  title: 'CreditChain',
-  description: 'CreditChain is a Rust-first, Reth-based, EVM-compatible public chain for AI-native financial infrastructure.',
+  title: 'PrometheusChain',
+  description: 'PrometheusChain is the Rust-first, Reth-based, EVM-compatible economic infrastructure for the Prometheus AGE ecosystem.',
   logoUrl: '/logo.png',
   iconUrl: '/logo.png',
   ogImageUrl: '/logo.png',
@@ -20,17 +20,17 @@ export default defineConfig({
     {
       element: React.createElement('a', { href: '/docs', target: '_self' }, 'Rustdocs')
     },
-    { text: 'GitHub', link: 'https://github.com/openibank/creditchain' },
+    { text: 'GitHub', link: 'https://github.com/theprometheusorg/prometheuschain' },
     {
       text: 'v2.1.0',
       items: [
         {
           text: 'Releases',
-          link: 'https://github.com/openibank/creditchain/releases'
+          link: 'https://github.com/theprometheusorg/prometheuschain/releases'
         },
         {
           text: 'Contributing',
-          link: 'https://github.com/openibank/creditchain/blob/main/CONTRIBUTING.md'
+          link: 'https://github.com/theprometheusorg/prometheuschain/blob/main/CONTRIBUTING.md'
         }
       ]
     }
@@ -38,11 +38,11 @@ export default defineConfig({
   socials: [
     {
       icon: 'github',
-      link: 'https://github.com/openibank/creditchain',
+      link: 'https://github.com/theprometheusorg/prometheuschain',
     },
     {
       icon: 'telegram',
-      link: 'https://docs.creditchain.org',
+      link: 'https://docs.prometheuschain.org',
     },
   ],
   sponsors: [
@@ -57,8 +57,8 @@ export default defineConfig({
             image: '/logo.png',
           },
           {
-            name: 'CreditChain',
-            link: 'https://www.creditchain.org',
+            name: 'PrometheusChain',
+            link: 'https://www.prometheuschain.org',
             image: '/logo.png',
           }
         ]
@@ -72,7 +72,7 @@ export default defineConfig({
     }
   },
   editLink: {
-    pattern: "https://github.com/openibank/creditchain/edit/main/docs/vocs/docs/pages/:path",
+    pattern: "https://github.com/theprometheusorg/prometheuschain/edit/main/docs/vocs/docs/pages/:path",
   },
   vite: {
     plugins: [

@@ -1,9 +1,9 @@
-//! Core CreditChain node utilities and libraries.
+//! Core PrometheusChain node utilities and libraries.
 
 #![doc(
-    html_logo_url = "https://www.creditchain.org",
-    html_favicon_url = "https://www.creditchain.org/favicon.ico",
-    issue_tracker_base_url = "https://github.com/openibank/creditchain/issues/"
+    html_logo_url = "https://www.prometheuschain.org",
+    html_favicon_url = "https://www.prometheuschain.org/favicon.ico",
+    issue_tracker_base_url = "https://github.com/paradigmxyz/reth/issues/"
 )]
 #![cfg_attr(not(test), warn(unused_crate_dependencies))]
 #![cfg_attr(docsrs, feature(doc_cfg))]

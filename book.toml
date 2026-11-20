@@ -1,14 +1,14 @@
 [book]
-authors = ["CreditChain Research Team"]
+authors = ["PrometheusChain Research Team"]
 language = "en"
 multilingual = false
 src = "book"
-title = "CreditChain Book"
-description = "A book on CreditChain node, protocol, and operator workflows"
+title = "PrometheusChain Book"
+description = "A book on PrometheusChain node, protocol, and operator workflows"
 
 [output.html]
 theme = "book/theme"
-git-repository-url = "https://github.com/openibank/creditchain"
+git-repository-url = "https://github.com/theprometheusorg/prometheuschain"
 default-theme = "ayu"
 no-section-label = true
 

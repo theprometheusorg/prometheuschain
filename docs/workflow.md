@@ -1,6 +1,6 @@
-# CreditChain Workflow
+# PrometheusChain Workflow
 
-Feature work should keep CreditChain-specific logic layered around owned
+Feature work should keep PrometheusChain-specific logic layered around owned
 modules, environment manifests, protocol contracts, and operator tooling. Avoid
 deep execution-layer divergence unless it is explicitly designed and reviewed.
 
@@ -8,7 +8,7 @@ deep execution-layer divergence unless it is explicitly designed and reviewed.
 
 - Keep changes scoped to the feature or fix.
 - Preserve Ethereum JSON-RPC compatibility unless the change explicitly targets
-  a CreditChain extension.
+  a PrometheusChain extension.
 - Update environment manifests, genesis files, docs, and smoke checks when an
   operator-facing behavior changes.
 - Mark release-note-worthy changes for the changelog.

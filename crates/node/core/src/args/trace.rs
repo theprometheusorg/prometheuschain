@@ -70,7 +70,7 @@ pub struct TraceArgs {
     /// of spans and events sent to the OTLP endpoint. It follows the same
     /// syntax as the `RUST_LOG` environment variable.
     ///
-    /// Example: --tracing-otlp.filter=info,creditchaind=debug,hyper_util=off
+    /// Example: --tracing-otlp.filter=info,prometheuschaind=debug,hyper_util=off
     ///
     /// Defaults to TRACE if not specified.
     #[arg(
@@ -86,7 +86,7 @@ pub struct TraceArgs {
     /// of logs sent to the OTLP endpoint. It follows the same syntax as the
     /// `RUST_LOG` environment variable.
     ///
-    /// Example: --logs-otlp.filter=info,creditchaind=debug
+    /// Example: --logs-otlp.filter=info,prometheuschaind=debug
     ///
     /// Defaults to INFO if not specified.
     #[arg(
@@ -101,16 +101,17 @@ pub struct TraceArgs {
     /// Service name to use for OTLP tracing export.
     ///
     /// This name will be used to identify the service in distributed tracing systems
-    /// like Jaeger or Zipkin. Useful for differentiating between multiple CreditChain instances.
+    /// like Jaeger or Zipkin. Useful for differentiating between multiple PrometheusChain
+    /// instances.
     ///
-    /// Set via `OTEL_SERVICE_NAME` environment variable. Defaults to "creditchaind" if not
+    /// Set via `OTEL_SERVICE_NAME` environment variable. Defaults to "prometheuschaind" if not
     /// specified.
     #[arg(
         long = "tracing-otlp.service-name",
         env = "OTEL_SERVICE_NAME",
         global = true,
         value_name = "NAME",
-        default_value = "creditchaind",
+        default_value = "prometheuschaind",
         hide = true,
         help_heading = "Tracing"
     )]
@@ -143,7 +144,7 @@ impl Default for TraceArgs {
             otlp_filter: EnvFilter::from_default_env(),
             logs_otlp_filter: EnvFilter::try_new("info").expect("valid filter"),
             sample_ratio: None,
-            service_name: "creditchaind".to_string(),
+            service_name: "prometheuschaind".to_string(),
         }
     }
 }

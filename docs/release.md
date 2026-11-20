@@ -1,6 +1,6 @@
-# CreditChain Releases
+# PrometheusChain Releases
 
-CreditChain releases produce signed `creditchaind` artifacts, Docker images,
+PrometheusChain releases produce signed `prometheuschaind` artifacts, Docker images,
 environment manifests, and operator notes.
 
 ## Release PR
@@ -16,10 +16,10 @@ environment manifests, and operator notes.
 ## Publish
 
 - Tag the merge commit as `vx.y.z`.
-- Push the tag to `openibank/creditchain`.
-- Build and publish `creditchaind` artifacts.
-- Publish Docker images under `ghcr.io/openibank/creditchain`.
-- Publish operator notes on `https://docs.creditchain.org`.
+- Push the tag to `theprometheusorg/prometheuschain`.
+- Build and publish `prometheuschaind` artifacts.
+- Publish Docker images under `ghcr.io/theprometheusorg/prometheuschain`.
+- Publish operator notes on `https://docs.prometheuschain.org`.
 
 Devnet may reset by release. Testnet must not reset casually. Mainnet releases
 require an explicit operator notice and rollback plan.

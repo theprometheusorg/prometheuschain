@@ -30,7 +30,7 @@ mod tests {
     fn test_args_stripping() {
         // Simulates what the filter+map does
         let raw = vec![
-            "creditchaind",
+            "prometheuschaind",
             "node",
             "--http",
             "--p2p.secret",

@@ -154,7 +154,7 @@ where
     where
         L: Launcher<C, Ext>,
     {
-        tracing::info!(target: "creditchaind::cli", version = ?version::version_metadata().short_version, "Starting {}",  version::version_metadata().name_client);
+        tracing::info!(target: "prometheuschaind::cli", version = ?version::version_metadata().short_version, "Starting {}",  version::version_metadata().name_client);
 
         let Self {
             datadir,
@@ -204,7 +204,7 @@ where
         let data_dir = node_config.datadir();
         let db_path = data_dir.db();
 
-        tracing::info!(target: "creditchaind::cli", path = ?db_path, "Opening database");
+        tracing::info!(target: "prometheuschaind::cli", path = ?db_path, "Opening database");
         let database = init_db(db_path.clone(), self.db.database_args())?.with_metrics();
 
         if with_unused_ports {
@@ -235,7 +235,9 @@ pub struct NoArgs;
 mod tests {
     use super::*;
     use reth_discv4::DEFAULT_DISCOVERY_PORT;
-    use reth_ethereum_cli::chainspec::{EthereumChainSpecParser, SUPPORTED_CHAINS};
+    use reth_ethereum_cli::chainspec::{
+        chain_value_parser, EthereumChainSpecParser, SUPPORTED_CHAINS,
+    };
     use std::{
         net::{IpAddr, Ipv4Addr, SocketAddr},
         path::Path,
@@ -253,7 +255,10 @@ mod tests {
         for chain in SUPPORTED_CHAINS {
             let args: NodeCommand<EthereumChainSpecParser> =
                 NodeCommand::parse_from(["reth", "--chain", chain]);
-            assert_eq!(args.chain.chain, chain.parse::<reth_chainspec::Chain>().unwrap());
+            // PrometheusChain environment aliases resolve from bundled genesis files and are
+            // not named `Chain` variants, so compare resolved chain IDs rather than enum values.
+            let expected = chain_value_parser(chain).unwrap();
+            assert_eq!(args.chain.chain.id(), expected.chain.id(), "failed to parse chain {chain}");
         }
     }
 
@@ -321,23 +326,23 @@ mod tests {
     #[test]
     fn parse_config_path() {
         let cmd: NodeCommand<EthereumChainSpecParser> = NodeCommand::try_parse_args_from([
-            "creditchaind",
+            "prometheuschaind",
             "--config",
-            "my/path/to/creditchain.toml",
+            "my/path/to/prometheuschain.toml",
         ])
         .unwrap();
-        // always store creditchain.toml in the data dir, not the chain specific data dir
+        // always store prometheuschain.toml in the data dir, not the chain specific data dir
         let data_dir = cmd.datadir.resolve_datadir(cmd.chain.chain);
         let config_path = cmd.config.unwrap_or_else(|| data_dir.config());
-        assert_eq!(config_path, Path::new("my/path/to/creditchain.toml"));
+        assert_eq!(config_path, Path::new("my/path/to/prometheuschain.toml"));
 
         let cmd: NodeCommand<EthereumChainSpecParser> =
-            NodeCommand::try_parse_args_from(["creditchaind"]).unwrap();
+            NodeCommand::try_parse_args_from(["prometheuschaind"]).unwrap();
 
-        // always store creditchain.toml in the data dir, not the chain specific data dir
+        // always store prometheuschain.toml in the data dir, not the chain specific data dir
         let data_dir = cmd.datadir.resolve_datadir(cmd.chain.chain);
         let config_path = cmd.config.clone().unwrap_or_else(|| data_dir.config());
-        let end = format!("{}/creditchain.toml", SUPPORTED_CHAINS[0]);
+        let end = format!("{}/prometheuschain.toml", SUPPORTED_CHAINS[0]);
         assert!(config_path.ends_with(end), "{:?}", cmd.config);
     }
 
@@ -348,7 +353,7 @@ mod tests {
         let data_dir = cmd.datadir.resolve_datadir(cmd.chain.chain);
 
         let db_path = data_dir.db();
-        let end = format!("creditchain/{}/db", SUPPORTED_CHAINS[0]);
+        let end = format!("prometheuschain/{}/db", SUPPORTED_CHAINS[0]);
         assert!(db_path.ends_with(end), "{:?}", cmd.config);
 
         let cmd: NodeCommand<EthereumChainSpecParser> =
@@ -429,6 +434,6 @@ mod tests {
         assert_eq!(cmd.network.discovery.port, 0);
 
         // make sure the ipc path is not the default
-        assert_ne!(cmd.rpc.ipcpath, String::from("/tmp/creditchaind.ipc"));
+        assert_ne!(cmd.rpc.ipcpath, String::from("/tmp/prometheuschaind.ipc"));
     }
 }

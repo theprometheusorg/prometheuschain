@@ -76,7 +76,7 @@ fn dry_run<N: ProviderNodeTypes>(
     to: u64,
     from: u64,
 ) -> eyre::Result<()> {
-    info!(target: "creditchaind::cli", "Executing stage.");
+    info!(target: "prometheuschaind::cli", "Executing stage.");
 
     let provider = output_provider_factory.database_provider_rw()?;
     let mut stage = StorageHashingStage {
@@ -94,7 +94,7 @@ fn dry_run<N: ProviderNodeTypes>(
         }
     }
 
-    info!(target: "creditchaind::cli", "Success.");
+    info!(target: "prometheuschaind::cli", "Success.");
 
     Ok(())
 }

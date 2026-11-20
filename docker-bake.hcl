@@ -1,7 +1,7 @@
-// Docker Bake configuration for CreditChain images
+// Docker Bake configuration for PrometheusChain images
 
 variable "REGISTRY" {
-  default = "ghcr.io/openibank"
+  default = "ghcr.io/theprometheusorg"
 }
 
 variable "TAG" {
@@ -31,11 +31,11 @@ variable "VERGEN_GIT_DIRTY" {
 
 // Common settings for all targets
 group "default" {
-  targets = ["creditchain"]
+  targets = ["prometheus"]
 }
 
 group "nightly" {
-  targets = ["creditchain", "creditchain-profiling"]
+  targets = ["prometheus", "prometheus-profiling"]
 }
 
 // Base target with shared configuration
@@ -61,25 +61,25 @@ target "_base_profiling" {
   platforms  = ["linux/amd64"]
 }
 
-// CreditChain
-target "creditchain" {
+// PrometheusChain
+target "prometheus" {
   inherits = ["_base"]
   args = {
-    BINARY        = "creditchaind"
+    BINARY        = "prometheuschaind"
     MANIFEST_PATH = "bin/reth"
   }
-  tags = ["${REGISTRY}/creditchain:${TAG}"]
+  tags = ["${REGISTRY}/prometheus:${TAG}"]
 }
 
-target "creditchain-profiling" {
+target "prometheus-profiling" {
   inherits = ["_base_profiling"]
   args = {
-    BINARY        = "creditchaind"
+    BINARY        = "prometheuschaind"
     MANIFEST_PATH = "bin/reth"
     BUILD_PROFILE = "profiling"
     FEATURES      = "jemalloc-prof"
   }
-  tags = ["${REGISTRY}/creditchain:nightly-profiling"]
+  tags = ["${REGISTRY}/prometheus:nightly-profiling"]
 }
 
 // Hive test targets — single-platform, hivetests profile, tar output
@@ -98,20 +98,20 @@ variable "HIVE_OUTPUT_DIR" {
 target "hive" {
   inherits = ["_base_hive"]
   args = {
-    BINARY        = "creditchaind"
+    BINARY        = "prometheuschaind"
     MANIFEST_PATH = "bin/reth"
   }
-  tags   = ["creditchain:local"]
-  output = ["type=docker,dest=${HIVE_OUTPUT_DIR}/creditchain_image.tar"]
+  tags   = ["prometheus:local"]
+  output = ["type=docker,dest=${HIVE_OUTPUT_DIR}/prometheus_image.tar"]
 }
 
 // Kurtosis test target
 target "kurtosis" {
   inherits  = ["_base_hive"]
   args = {
-    BINARY        = "creditchaind"
+    BINARY        = "prometheuschaind"
     MANIFEST_PATH = "bin/reth"
   }
-  tags   = ["ghcr.io/openibank/creditchain:kurtosis-ci"]
-  output = ["type=docker,dest=${HIVE_OUTPUT_DIR}/creditchain_image.tar"]
+  tags   = ["ghcr.io/theprometheusorg/prometheuschain:kurtosis-ci"]
+  output = ["type=docker,dest=${HIVE_OUTPUT_DIR}/prometheus_image.tar"]
 }

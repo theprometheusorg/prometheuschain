@@ -189,7 +189,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + Hardforks + EthereumHardforks>
                                 }
                             }
                             Err(error) if error.is_retryable() => {
-                                warn!(target: "creditchaind::cli", "Error requesting header: {error}. Retrying...")
+                                warn!(target: "prometheuschaind::cli", "Error requesting header: {error}. Retrying...")
                             }
                             Err(error) => return Err(error.into()),
                         }
@@ -364,7 +364,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + Hardforks + EthereumHardforks>
         };
 
         let start = Instant::now();
-        info!(target: "creditchaind::cli", stage = %self.stage, "Executing stage");
+        info!(target: "prometheuschaind::cli", stage = %self.stage, "Executing stage");
         loop {
             exec_stage.execute_ready(input).await?;
             let ExecOutput { checkpoint, done } = exec_stage.execute(&provider_rw, input)?;
@@ -383,7 +383,7 @@ impl<C: ChainSpecParser<ChainSpec: EthChainSpec + Hardforks + EthereumHardforks>
                 break
             }
         }
-        info!(target: "creditchaind::cli", stage = %self.stage, time = ?start.elapsed(), "Finished stage");
+        info!(target: "prometheuschaind::cli", stage = %self.stage, time = ?start.elapsed(), "Finished stage");
 
         Ok(())
     }

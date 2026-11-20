@@ -1,14 +1,19 @@
 [environment]
 name = "devnet"
-display_name = "CreditChain Devnet"
+display_name = "PrometheusChain Devnet"
 chain_id = 2026042403
 reset_policy = "resettable-by-release"
 genesis = "genesis/devnet.json"
-binary = "creditchaind"
+binary = "prometheuschaind"
+
+[currency]
+name = "Prometheus"
+symbol = "PRM"
+decimals = 18
 
 [rpc]
-http_url = "https://devnet.creditchain.org"
-faucet_url = "https://faucet.creditchain.org"
+http_url = "https://devnet.prometheuschain.org"
+faucet_url = "https://faucet.prometheuschain.org"
 metrics_port = 9001
 
 [network]
@@ -16,5 +21,5 @@ discovery = true
 bootnodes = []
 
 [links]
-website = "https://www.creditchain.org"
-docs = "https://docs.creditchain.org"
+website = "https://www.prometheuschain.org"
+docs = "https://docs.prometheuschain.org"

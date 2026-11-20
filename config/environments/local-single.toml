@@ -1,10 +1,15 @@
 [environment]
 name = "local-single"
-display_name = "CreditChain Local Single"
+display_name = "PrometheusChain Local Single"
 chain_id = 2026042401
 reset_policy = "ephemeral"
 genesis = "genesis/local-single.json"
-binary = "creditchaind"
+binary = "prometheuschaind"
+
+[currency]
+name = "Prometheus"
+symbol = "PRM"
+decimals = 18
 
 [rpc]
 http_addr = "127.0.0.1"
@@ -18,5 +23,5 @@ discovery = false
 bootnodes = []
 
 [links]
-website = "https://www.creditchain.org"
-docs = "https://docs.creditchain.org"
+website = "https://www.prometheuschain.org"
+docs = "https://docs.prometheuschain.org"

@@ -389,7 +389,7 @@ where
         StateWriteConfig::default(),
     )?;
 
-    trace!(target: "creditchaind::cli", "Inserted state");
+    trace!(target: "prometheuschaind::cli", "Inserted state");
 
     Ok(())
 }
@@ -406,7 +406,7 @@ where
     let alloc_accounts = alloc.clone().map(|(addr, account)| (*addr, Some(Account::from(account))));
     provider.insert_account_for_hashing(alloc_accounts)?;
 
-    trace!(target: "creditchaind::cli", "Inserted account hashes");
+    trace!(target: "prometheuschaind::cli", "Inserted account hashes");
 
     let alloc_storage = alloc.filter_map(|(addr, account)| {
         // only return Some if there is storage
@@ -416,7 +416,7 @@ where
     });
     provider.insert_storage_for_hashing(alloc_storage)?;
 
-    trace!(target: "creditchaind::cli", "Inserted storage hashes");
+    trace!(target: "prometheuschaind::cli", "Inserted storage hashes");
 
     Ok(())
 }
@@ -515,7 +515,7 @@ where
             .ok_or_else(|| ProviderError::HeaderNotFound(block.into()))?;
         let state_root = header.state_root();
 
-        debug!(target: "creditchaind::cli",
+        debug!(target: "prometheuschaind::cli",
             block,
             chain=%provider_rw.chain_spec().chain(),
             "Initializing state at block"
@@ -527,7 +527,7 @@ where
     // first line can be state root
     let dump_state_root = parse_state_root(&mut reader)?;
     if expected_state_root != dump_state_root {
-        error!(target: "creditchaind::cli",
+        error!(target: "prometheuschaind::cli",
             ?dump_state_root,
             ?expected_state_root,
             "State root from state dump does not match state root in current header."
@@ -545,7 +545,7 @@ where
     // write state to db with chunked commits to avoid OOM
     dump_state(collector, provider_factory, block)?;
 
-    info!(target: "creditchaind::cli", "All accounts written to database, starting state root computation (may take some time)");
+    info!(target: "prometheuschaind::cli", "All accounts written to database, starting state root computation (may take some time)");
 
     // clear trie tables so state root is computed from scratch
     {
@@ -558,12 +558,12 @@ where
     // compute and compare state root
     let computed_state_root = compute_state_root_chunked(provider_factory)?;
     if computed_state_root == expected_state_root {
-        info!(target: "creditchaind::cli",
+        info!(target: "prometheuschaind::cli",
             ?computed_state_root,
             "Computed state root matches state root in state dump"
         );
     } else {
-        error!(target: "creditchaind::cli",
+        error!(target: "prometheuschaind::cli",
             ?computed_state_root,
             ?expected_state_root,
             "Computed state root does not match state root in state dump"
@@ -594,7 +594,7 @@ fn parse_state_root(reader: &mut impl BufRead) -> eyre::Result<B256> {
     reader.read_line(&mut line)?;
 
     let expected_state_root = serde_json::from_str::<StateRoot>(&line)?.root;
-    trace!(target: "creditchaind::cli",
+    trace!(target: "prometheuschaind::cli",
         root=%expected_state_root,
         "Read state root from file"
     );
@@ -670,7 +670,7 @@ where
         if storage_units > 0 && storage_units + account_units > STORAGE_COMMIT_THRESHOLD {
             provider_rw.commit()?;
             provider_rw = provider_factory.database_provider_rw()?;
-            info!(target: "creditchaind::cli",
+            info!(target: "prometheuschaind::cli",
                 total_accounts,
                 accounts_len,
                 storage_units,
@@ -692,14 +692,14 @@ where
         storage_units += account_units;
 
         if total_accounts.is_multiple_of(100_000) {
-            info!(target: "creditchaind::cli", total_accounts, accounts_len, "Writing accounts...");
+            info!(target: "prometheuschaind::cli", total_accounts, accounts_len, "Writing accounts...");
         }
     }
 
     // commit final batch
     provider_rw.commit()?;
 
-    info!(target: "creditchaind::cli", total_accounts, "All accounts written to database");
+    info!(target: "prometheuschaind::cli", total_accounts, "All accounts written to database");
 
     Ok(())
 }
@@ -813,7 +813,7 @@ where
     Provider: DBProvider<Tx: DbTxMut> + TrieWriter + StorageSettingsCache,
     A: reth_trie_db::TrieTableAdapter,
 {
-    trace!(target: "creditchaind::cli", "Computing state root");
+    trace!(target: "prometheuschaind::cli", "Computing state root");
 
     let tx = provider.tx_ref();
     let mut intermediate_state: Option<IntermediateStateRootState> = None;
@@ -832,7 +832,7 @@ where
                 let updated_len = provider.write_trie_updates(updates)?;
                 total_flushed_updates += updated_len;
 
-                trace!(target: "creditchaind::cli",
+                trace!(target: "prometheuschaind::cli",
                     last_account_key = %state.account_root_state.last_hashed_key,
                     updated_len,
                     total_flushed_updates,
@@ -842,7 +842,7 @@ where
                 intermediate_state = Some(*state);
 
                 if total_flushed_updates.is_multiple_of(SOFT_LIMIT_COUNT_FLUSHED_UPDATES) {
-                    info!(target: "creditchaind::cli",
+                    info!(target: "prometheuschaind::cli",
                         total_flushed_updates,
                         "Flushing trie updates"
                     );
@@ -852,7 +852,7 @@ where
                 let updated_len = provider.write_trie_updates(updates)?;
                 total_flushed_updates += updated_len;
 
-                trace!(target: "creditchaind::cli",
+                trace!(target: "prometheuschaind::cli",
                     %root,
                     updated_len,
                     total_flushed_updates,
@@ -890,7 +890,7 @@ where
     >,
     A: reth_trie_db::TrieTableAdapter,
 {
-    trace!(target: "creditchaind::cli", "Computing state root");
+    trace!(target: "prometheuschaind::cli", "Computing state root");
 
     let mut intermediate_state: Option<IntermediateStateRootState> = None;
     let mut total_flushed_updates = 0;
@@ -907,7 +907,7 @@ where
                 let updated_len = provider_rw.write_trie_updates(updates)?;
                 total_flushed_updates += updated_len;
 
-                info!(target: "creditchaind::cli",
+                info!(target: "prometheuschaind::cli",
                     last_account_key = %state.account_root_state.last_hashed_key,
                     updated_len,
                     total_flushed_updates,
@@ -921,7 +921,7 @@ where
                 let updated_len = provider_rw.write_trie_updates(updates)?;
                 total_flushed_updates += updated_len;
 
-                info!(target: "creditchaind::cli",
+                info!(target: "prometheuschaind::cli",
                     %root,
                     updated_len,
                     total_flushed_updates,

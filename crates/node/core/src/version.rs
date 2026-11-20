@@ -1,4 +1,4 @@
-//! Version information for CreditChain.
+//! Version information for PrometheusChain.
 use std::{borrow::Cow, sync::OnceLock};
 
 use alloy_primitives::Bytes;
@@ -44,15 +44,15 @@ pub struct RethCliVersionConsts {
     /// The build features.
     pub vergen_cargo_features: Cow<'static, str>,
 
-    /// The short version information for CreditChain.
+    /// The short version information for PrometheusChain.
     pub short_version: Cow<'static, str>,
 
-    /// The long version information for CreditChain.
+    /// The long version information for PrometheusChain.
     pub long_version: Cow<'static, str>,
     /// The build profile name.
     pub build_profile_name: Cow<'static, str>,
 
-    /// The version information for CreditChain formatted for P2P (devp2p).
+    /// The version information for PrometheusChain formatted for P2P (devp2p).
     ///
     /// - The latest version from Cargo.toml
     /// - The target triple
@@ -60,9 +60,9 @@ pub struct RethCliVersionConsts {
     /// # Example
     ///
     /// ```text
-    /// creditchaind/v{major}.{minor}.{patch}-{sha1}/{target}
+    /// prometheuschaind/v{major}.{minor}.{patch}-{sha1}/{target}
     /// ```
-    /// e.g.: `creditchaind/v0.1.0-alpha.1-428a6dc2f/aarch64-apple-darwin`
+    /// e.g.: `prometheuschaind/v0.1.0-alpha.1-428a6dc2f/aarch64-apple-darwin`
     pub p2p_client_version: Cow<'static, str>,
 
     /// extra data used for payload building
@@ -77,10 +77,10 @@ pub struct RethCliVersionConsts {
 /// # Example
 ///
 /// ```text
-/// creditchaind/v{major}.{minor}.{patch}/{OS}
+/// prometheuschaind/v{major}.{minor}.{patch}/{OS}
 /// ```
 pub fn default_extra_data() -> String {
-    format!("creditchaind/v{}/{}", env!("CARGO_PKG_VERSION"), std::env::consts::OS)
+    format!("prometheuschaind/v{}/{}", env!("CARGO_PKG_VERSION"), std::env::consts::OS)
 }
 
 /// The default extra data in bytes.
@@ -104,10 +104,10 @@ pub fn version_metadata() -> &'static RethCliVersionConsts {
     VERSION_METADATA.get_or_init(default_reth_version_metadata)
 }
 
-/// Default CreditChain version metadata using compile-time env! macros.
+/// Default PrometheusChain version metadata using compile-time env! macros.
 pub fn default_reth_version_metadata() -> RethCliVersionConsts {
     RethCliVersionConsts {
-        name_client: Cow::Borrowed("CreditChain"),
+        name_client: Cow::Borrowed("PrometheusChain"),
         cargo_pkg_version: Cow::Borrowed(env!("CARGO_PKG_VERSION")),
         vergen_git_sha_long: Cow::Borrowed(env!("VERGEN_GIT_SHA")),
         vergen_git_sha: Cow::Borrowed(env!("VERGEN_GIT_SHA_SHORT")),
